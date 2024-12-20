@@ -17,12 +17,21 @@ jobs:
       with:
             app_id: ${{ secrets.OCMBOT_APP_ID }}
             private_key: ${{ secrets.OCMBOT_PRIV_KEY }}
+
+    - name: Generate token
+      id: tools_token
+      uses: tibdex/github-app-token@v2
+      with:
+            app_id: ${{ secrets.TOOLS_BOT_APP_ID }}
+            private_key: ${{ secrets.TOOLS_BOT_PRIV_KEY }}
+            github_api_url: ${{ secrets.TOOLS_API_URL }}
             
     - name: Checkout repo
       uses: actions/checkout@v4
 
     - name: Fetch security.txt
       run: |
+        echo "tools token: #${{ steps.tools_token.outputs.token }}#"
         curl -sSL \
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer ${{ secrets.SECURITY_TXT_READ }}" \
